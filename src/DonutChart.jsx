@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import * as d3 from "d3";
 import S from "string";
 
+const PEGB_BI_CLASS = "pegb-bi-donut";
+
 const calculateLabel = ({ label, key }) => label || S(key).humanize().s;
 
 class DonutChart extends Component {
@@ -51,6 +53,7 @@ class DonutChart extends Component {
       segments
     } = this.props;
 
+    const svg = d3.select(this.arc).select("svg");
     const context = d3.select(this.arc).select("svg").select("g")
       .attr("transform", "translate(50,50)");
 
@@ -68,7 +71,8 @@ class DonutChart extends Component {
     const legendSpacing = 4;
 
     const path = context.selectAll("path").data(pieData).enter()
-			.append("path").attr("fill", (d, i) => color(calculateLabel(d.data)))
+			.append("path").attr("id", (d, i) => `path_${i}`)
+      .attr("fill", (d, i) => color(calculateLabel(d.data)))
       .attr("d", arcGenerator);
 
     // path.on("mouseover", d => {
@@ -84,20 +88,19 @@ class DonutChart extends Component {
     //   tooltip.style("display", "none");
     // });
 
-    var legend = context.selectAll(".legend").data(color.domain()).enter()
-			.append("g").attr("class", "legend")
-			.attr("transform", (d, i) => {
-	      var height = legendRectSize + legendSpacing;
-	      var offset = height * color.domain().length / 2;
-	      var horz = -2 * legendRectSize;
-	      var vert = i * height + 3;
-	      return "translate(" + horz + "," + vert + ")";
-	    });
+    // const legend = context.selectAll(".legend").data(color.domain()).enter()
+		// 	.append("g").attr("class", "legend")
+		// 	.attr("transform", (d, i) => {
+	  //     return "translate(0, 0)";
+	  //   });
 
-    legend.append("rect").attr("width", 1).attr("height", 1)
-			.style("fill", color).style("stroke", color);
+    context.selectAll("text").data(pieData).enter()
+      .append("text").attr("class", `${PEGB_BI_CLASS} legend`)
+      .attr("dx", 2).attr("dy", 10)
+      .append("textPath").attr("href", (d,i) => `#path_${i}`)
+      .text(d => calculateLabel(d.data));
 
-    legend.append("text").attr("width", 5).attr("height", 1).text(d => d);
+    // context.append("g").append("text").attr("font-size", 2).text(d => d);
   }
 }
 export default DonutChart;

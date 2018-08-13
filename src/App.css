@@ -112,6 +112,11 @@ text.serie2, text.serie2.legend {
 	fill: tomato;
 }
 
+text.pegb-bi-donut.legend {
+  font-size: 5px;
+  fill: white;
+}
+
 .ticks {
   font-size: 12px;
 	fill: gray;
