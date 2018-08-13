@@ -32,6 +32,11 @@ class LinePlot extends Component {
   }
 
   componentDidMount() {
+    d3.select(this.arc).append("svg").append("g");
+    this.plot();
+  }
+
+  componentDidUpdate() {
     this.plot();
   }
 
@@ -60,12 +65,12 @@ class LinePlot extends Component {
       }
     } = this.props;
 
-    const svg = d3.select(this.arc).append("svg").attr("width", w).attr("height", h);
+    const svg = d3.select(this.arc).select(svg).attr("width", w).attr("height", h);
 
     const width = svg.attr("width") - margin.left - margin.right;
     const height = svg.attr("height") - margin.top - margin.bottom;
 
-		const context = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		const context = svg.select("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     const x_scale = xScale || defXScale({key: xkey, dataset, padding, width});
     const y_scale = y1Scale || defYScale({key: y1key, dataset, padding, height});

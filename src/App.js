@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Scatter from './Scatter'
+// import Scatter from './Scatter'
 import BarPlot from './BarPlot'
 import ScatterPlot from './ScatterPlot'
 import LinePlot from './LinePlot'
@@ -17,30 +17,24 @@ class App extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			containerWidth: 700,
-			containerHeight: 520
+			containerWidth: window.innerWidth,
+			containerHeight: window.innerHeight
 		};
 	}
 
   render() {
     return (
-			<div className = "App">
-			  <header className = "App-header">
-			    <img src = {logo} className = "App-logo" alt = "logo"/>
-			    <h1 className="Prueba">PegB Test</h1>
-			  </header>
-				<p>Click</p>
-				<Scatter data = { createData(50, "bar") }
-								 w = {700}
-								 h = {500}
-								 padding = {2}
-								 margin = {{ top: 20, right: 20, bottom: 40, left: 50 }} />
-				<DonutChart data = { data_timeseries.results }
-										width = {500}
-										height = {500}
-										padding = {8}
-										margin = {{ top: 30, right: 50, bottom: 40, left: 80 }}
-										segments = {[{ key: "cash_in_count" }, { key: "cash_out_count" }]} />
+			<div className="App">
+				<DonutChart
+					className="container"
+					data={data_timeseries.results}
+					segments={[{ key: "cash_in_count" }, { key: "cash_out_count" }]}
+				/>
+				{/*<Scatter data = { createData(50, "bar") }
+				w = {700}
+				h = {500}
+				padding = {2}
+				margin = {{ top: 20, right: 20, bottom: 40, left: 50 }} />
 				<BarPlot
 					data = { timeSeriesCreator() }
 					margin = {{ top: 20, right: 20, bottom: 40, left: 50 }}
@@ -53,22 +47,22 @@ class App extends Component {
 				<LinePlot
 					data = { timeSeriesCreator() }
 					margin = {{ top: 30, right: 50, bottom: 40, left: 80 }}
-					width={900}
-					height={600}
+					width={this.containerWidth / 2}
+					height={this.containerHeight / 2}
 					padding = {8}
 					x={{ key: "date" }}
 					y1={{ key: "cash_in_amount" }}
 					y2={{ key: "cash_out_amount" }}
 				/>
+				*/}
 			</div>
 		);
   }
 
-	// componentDidMount() {
-	// 	window.onresize = ({ target: { innerHeight, innerWidth } }) =>
-	// 	 	console.log(innerWidth, innerHeight) ||
-	// 		this.setState({ containerWidth: innerWidth, containerHeight: innerHeight });
-	// }
+	componentDidMount() {
+		window.onresize = ({ target: { innerHeight, innerWidth } }) =>
+			this.setState({ containerWidth: innerWidth, containerHeight: innerHeight });
+	}
 }
 
 export default App;
