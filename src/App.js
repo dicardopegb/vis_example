@@ -11,24 +11,22 @@ import createData from "./createData"
 import data_timeseries from './data_timeseries';
 import data from "./sunburst_data";
 import timeSeriesCreator from "./timeSeries";
+import Dashboard from "./Dashboard";
+
+const transactionsByInstitution = data.results.map(d => ({ ...d, size: d.cash_in_amount }));
 
 class App extends Component {
 
 	constructor(props){
 		super(props);
-		this.state = {
-			containerWidth: window.innerWidth,
-			containerHeight: window.innerHeight
-		};
 	}
 
   render() {
     return (
-			<div className="App">
-				<DonutChart
-					className="container"
-					data={data_timeseries.results}
-					segments={[{ key: "cash_in_count" }, { key: "cash_out_count" }]}
+			<div className="App centered">
+				<Dashboard
+					transactionsByDate={timeSeriesCreator()}
+					transactionsByInstitution={transactionsByInstitution}
 				/>
 				{/*<Scatter data = { createData(50, "bar") }
 				w = {700}
@@ -58,11 +56,6 @@ class App extends Component {
 			</div>
 		);
   }
-
-	componentDidMount() {
-		window.onresize = ({ target: { innerHeight, innerWidth } }) =>
-			this.setState({ containerWidth: innerWidth, containerHeight: innerHeight });
-	}
 }
 
 export default App;

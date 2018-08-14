@@ -1,3 +1,7 @@
+div {
+  display: flex;
+}
+
 .App {
   text-align: center;
 	display: flex;
@@ -35,6 +39,21 @@
 .container {
 	display: flex;
 	flex: 1;
+  flex-direction: column;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  flex-direction: row;
+  flex-flow: wrap;
+}
+
+.wrap {
+  flex-flow: wrap;
 }
 
 .bar {
@@ -182,4 +201,31 @@ text.pegb-bi-donut.legend {
 
 .label {
  font-weight: 600;
+}
+
+.rv-xy-plot {
+  display: flex !important;
+  flex: 1 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.widget {
+  margin: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0 10px;
+  box-shadow: 0 0 6px 1px rgba(0,0,0,0.2);
+  background: #fff;
+}
+
+.graph > div {
+  height: auto !important;
+  width: auto !important;
+  flex: 1;
+}
+
+.centered {
+  align-items: center;
+  justify-content: center;
 }
