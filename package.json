@@ -2,6 +2,7 @@
   "name": "prueba_react",
   "version": "0.1.0",
   "private": true,
+  "react-vis": "^1.10.4",
   "dependencies": {
     "d3": "^5.5.0",
     "d3-array": "^1.2.1",
@@ -16,11 +17,9 @@
     "moment": "^2.22.2",
     "numeral": "^2.0.6",
     "react": "^16.4.1",
-    "react-d3-components": "^0.9.1",
-    "react-d3-library": "^1.1.8",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
-    "react-vis": "^1.10.4",
+    "react-vis": "file:../react-vis",
     "string": "^3.3.3"
   },
   "scripts": {

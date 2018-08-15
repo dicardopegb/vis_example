@@ -1,12 +1,6 @@
 {
   "total": 6,
   "results": [{
-    "cash_in_amount": 319887,
-    "cash_in_count": 292,
-    "cash_out_amount": 1648.33,
-    "cash_out_count": 19,
-    "net_cash_in_amount": 318238.67
-  }, {
     "institution_name": "AIRTEL",
     "institution_type": "BANK",
     "cash_in_amount": 0,

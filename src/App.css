@@ -210,6 +210,19 @@ text.pegb-bi-donut.legend {
   height: auto !important;
 }
 
+.rv-hint {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.hint-text {
+  font-size: 12px;
+}
+
+.path-name {
+  height: 34px;
+}
+
 .widget {
   margin: 5px;
   border: 1px solid #ddd;
