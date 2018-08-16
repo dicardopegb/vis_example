@@ -6,7 +6,6 @@ import BarPlot from './BarPlot'
 import ScatterPlot from './ScatterPlot'
 import LinePlot from './LinePlot'
 import DonutChart from './DonutChart'
-import SunBurst from './SunBurst'
 import createData from "./createData"
 import data_timeseries from './data_timeseries';
 import data from "./sunburst_data";

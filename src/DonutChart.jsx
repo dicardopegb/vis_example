@@ -1,8 +1,8 @@
 //@flow
 import React, { Component } from 'react';
-import { RadialChart, Hint, makeVisFlexible } from 'react-vis';
+import { RadialChart, Hint } from 'react-vis';
 
-const FlexibleRadialChart = makeVisFlexible(RadialChart);
+const CLASS = "pegb-bi-donut";
 
 export default class DonutChart extends Component {
   state = {
@@ -11,10 +11,10 @@ export default class DonutChart extends Component {
   render() {
     const {value} = this.state;
     return (
-      <FlexibleRadialChart
-        className={'donut-chart-example'}
-        innerRadius={100}
-        radius={140}
+      <RadialChart
+        className={CLASS}
+        innerRadius={20}
+        radius={35}
         getAngle={d => d.theta}
         data={[
           {theta: 2, className: 'custom-class'},
@@ -27,8 +27,8 @@ export default class DonutChart extends Component {
         onSeriesMouseOut={v => this.setState({value: false})}
         {...this.props}
       >
-        {value && <Hint value={value}/>}
-      </FlexibleRadialChart>
+        {value && <Hint value={value} />}
+      </RadialChart>
     );
   }
 }

@@ -5,26 +5,28 @@ export default ({
   subRowsKey = "children",
   aggregate,
   computeLevel,
-  prune = false
+  prune = false,
 }) => {
   const groupRecursively = (data, keys, i = 0, path = "root", count = 0) => {
     // This is the last level, just return the rows
     if (i === keys.length) {
       return data;
     }
+
     // Group the rows together for this level
     let groupedRows = Object.entries(groupBy(data, keys[i]))
-      .reduce(({ rows, c }, [key, value], ind) => (
-        {
+      .reduce(({ rows, c }, [key, value], ind) => {
+        const computed = computeLevel && computeLevel({ index: c, key, value });
+        return {
           rows: [...rows, {
             [pivotValKey]: key,
             [subRowsKey]: value,
             path: `${path}.${key}`,
-            ...(computeLevel && computeLevel({ index: c, key, value }))
+            ...computed
           }],
-          c: c + 1
-        }
-      ), { c: count, rows: [] }
+          c: c + 1,
+        };
+      }, { c: count, rows: [] }
     );
 
     // Recurse into the subRows

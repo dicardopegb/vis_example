@@ -52,10 +52,11 @@ const updateData = (data, keyPath, path = "") => {
 const Hint = ({ selected }) => {
   return (
     <g className={`${CLASS} inner-component`}>
+      <circle x={50} y={50} r={22} color="black" opacity="0.7" />
       <text x={0} y={0}>
-        <tspan x="-30" y="0" className={`${CLASS} hint-text`}>In count {selected.count}</tspan>
-        <tspan x="-30" y="1em" className={`${CLASS} hint-text`}>$ {selected.total}</tspan>
-        <tspan x="-30" y="2em" className={`${CLASS} hint-text`}>AVG {selected.avg.toFixed(2)}</tspan>
+        <tspan x="-13%" y="0" className={`${CLASS} hint-text`}>Count {selected.count}</tspan>
+        <tspan x="-13%" y="1em" className={`${CLASS} hint-text`}>$ {selected.total}</tspan>
+        <tspan x="-13%" y="2em" className={`${CLASS} hint-text`}>AVG {selected.avg.toFixed(2)}</tspan>
       </text>
     </g>
   );
@@ -70,9 +71,10 @@ export default class DetailSunburst extends React.Component {
   }
 
   render() {
+    const { style, ...rest } = this.props;
     const {clicked, data, finalValue, pathValue, selected} = this.state;
     return (
-      <div className={`${CLASS} container`}>
+      <div className={`${CLASS} container`} style={style}>
         <Sunburst
           viewBox="0 0 100 100"
           animation
@@ -102,12 +104,20 @@ export default class DetailSunburst extends React.Component {
           onValueClick={() => this.setState({clicked: !clicked})}
           colorType="literal"
           data={data}
+          width={100}
+          height={100}
+          style={{
+            ...style,
+            stroke: '#ddd',
+            strokeOpacity: 0.3,
+            strokeWidth: '0.5'
+          }}
           {...this.props}
         >
           {selected && (
             <CustomSVGSeries
               customComponent={() => <Hint selected={selected} />}
-              data={[{x: 50, y: 50 }]}
+              data={[{ x: 0, y: 0 }]}
             />
           )}
         </Sunburst>

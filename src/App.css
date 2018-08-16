@@ -210,17 +210,14 @@ text.pegb-bi-donut.legend {
   height: auto !important;
 }
 
-.rv-hint {
-  display: flex !important;
-  flex-direction: column;
-}
-
 .hint-text {
-  font-size: 12px;
+  font-size: 4px;
+  fill: white;
 }
 
 .path-name {
   height: 34px;
+  font-size: 10px;
 }
 
 .widget {
@@ -235,10 +232,39 @@ text.pegb-bi-donut.legend {
 .graph > div {
   height: auto !important;
   width: auto !important;
+  display: flex !important;
   flex: 1;
 }
 
 .centered {
   align-items: center;
   justify-content: center;
+}
+
+.rv-discrete-color-legend-item__color {
+  height: 10px;
+  width: 10px;
+  margin-right: 2px;
+  border-radius: 5px;
+}
+
+.rv-discrete-color-legend-item.horizontal {
+  display: flex !important;
+  flex-direction: row;
+}
+
+.space {
+  justify-content: space-around;
+}
+
+.rv-radial-chart__series--pie__slice {
+  border: 1px solid black;
+}
+
+.graph > div.rv-hint, .graph > div.rv-hint > div.rv-hint__content {
+  display: block !important;
+}
+
+.pegb-bi-sunburst-inplace-container {
+  flex-direction: column;
 }
