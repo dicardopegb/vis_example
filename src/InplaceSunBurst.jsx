@@ -11,7 +11,7 @@ const DIVERGING_COLOR_SCALE = ['#00939C', '#85C4C8', '#EC9370', '#C22E00'];
 const Hint = ({ selected }) => {
   return (
     <g className={`${CLASS} inner-component`}>
-      <circle x={50} y={50} r={28} color="black" opacity="0.7" />
+      <circle x={50} y={50} r={22} color="black" opacity="0.7" />
       <text x={0} y={0}>
 				<tspan x="-13%" y="-2em" className={`${CLASS} hint-text`}>{selected.name}</tspan>
         <tspan x="-13%" y="0em" className={`${CLASS} hint-text`}>Count {selected.count}</tspan>
@@ -30,46 +30,51 @@ export default class InplaceSunBurst extends React.Component {
   }
 
 	updateData(node) {
+    console.log(node);
 		if (node.children && node.children.length > 0){
 			const { children, name, color } = node;
 			this.setState({ selected: node, data: { children, name, color } });
-		}
+		} else {
+      this.setState({ selected: node });
+    }
 	}
 
+  canGoBack() {
+    const { selected } = this.state;
+    return selected && selected.parent;
+  }
+
 	goBack() {
-		const { selected } = this.state;
-		console.log(selected);
-		if (selected && selected.parent) {
-			this.updateData({ ...selected.parent, ...selected.parent.data });
-		}
+    const { selected } = this.state;
+		this.canGoBack() && this.updateData({ ...selected.parent, ...selected.parent.data });
 	}
 
   render() {
 		const { style, className, viewBox } = this.props;
-		console.log(this.props);
     const { data, selected } = this.state;
     return (
 			<div style={style} className={`${CLASS}-container ${className}`}>
 	      <Sunburst
 	        animation={{damping: 20, stiffness: 300}}
-	        colorType={"category"}
-	        colorRange={DIVERGING_COLOR_SCALE}
+	        colorType="literal"
 	        style={{ stroke: "#fff", ...style }}
 					onValueClick={this.updateData.bind(this)}
 	        height={100}
 	        width={100}
 	        viewBox={viewBox}
 					className={className}
+          {...this.props}
 					data={data}
 	      >
-				<button onClick={this.goBack.bind(this)} style={{
-					border: 0,
-					alignSelf: "flex-start",
-					backgroundColor: "rgba(0,0,0,0)",
-					color: "red"
-				}}>
-					<FontAwesomeIcon icon={faUndo} />
-				</button>
+				{this.canGoBack() &&
+          <rect onClick={this.goBack.bind(this)} style={{
+  					border: 0,
+  					alignSelf: "flex-start",
+  					color: "red"
+  				}}>
+  					<FontAwesomeIcon icon={faUndo} />
+  				</rect>
+        }
 				{selected && selected.total && (
 					<CustomSVGSeries
 						customComponent={() => <Hint selected={selected} />}
