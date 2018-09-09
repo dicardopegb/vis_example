@@ -1,6 +1,5 @@
 //@flow
 import React from "react";
-import numeral from "numeral";
 import {
   FlexibleXYPlot,
   XAxis,
@@ -19,6 +18,7 @@ import { EXTENDED_DISCRETE_COLOR_RANGE } from "react-vis/dist/theme";
 import DetailSunburst from "./DetailSunburst";
 import InplaceSunBurst from "./InplaceSunBurst";
 import DonutChart from "./DonutChart";
+import ZoomableChart from "./ZoomableChart";
 import grouper from "./groupRecursevely";
 
 const colors = EXTENDED_DISCRETE_COLOR_RANGE;
@@ -49,21 +49,33 @@ export default class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
-    const { transactionsByInstitution } = props;
+    const { transactionsByInstitution, transactionsByDate } = props;
     const groupedRows = groupRecursively(
       transactionsByInstitution,
       ["institution_type", "institution_name"]
     );
     const groupedColors = accumulateLegend(groupedRows, { names: [], colors: [] });
+    const timeSeries = [
+      {
+        title: "Cash in",
+        data: transactionsByDate.map(({ date, cash_in_amount }) => ({ x: date, y: cash_in_amount })),
+        disabled: false
+      },
+      {
+        title: "Cash out",
+        data: transactionsByDate.map(({ date, cash_out_amount }) => ({ x: date, y: cash_out_amount })),
+        disabled: false
+      }
+    ];
     this.state = {
       distributionByInstitution: groupedRows,
-      groupedColors
+      groupedColors,
+      timeSeries
     }
   }
 
   render() {
-    const { transactionsByDate } = this.props;
-    const { distributionByInstitution, groupedColors } = this.state;
+    const { distributionByInstitution, groupedColors, timeSeries } = this.state;
     return (
       <div className="container row space">
         <div className="column widget">
@@ -93,39 +105,29 @@ export default class Dashboard extends React.Component {
           <div className="container">
             <div className="container widget">
               <h4>Transaction trend</h4>
-              <FlexibleXYPlot
-                getX={d => d.date}
-                xType="time"
-                getY={d => d.cash_in_amount}
+              <ZoomableChart
                 className="graph"
-                style={{ padding: "0 10px" }}
-              >
-                <HorizontalGridLines />
-                <VerticalGridLines />
-                <LineMarkSeries data={transactionsByDate} />
-                {/*<LineSeries
-                  data={data}
-                  getY={d => d.cash_out_amount}
-                  yDomain={data.map(d => d.cash_out_amount)}
-                />*/}
-                <XAxis />
-                <YAxis tickFormat={(v) => numeral(v).format("0.0a")} />
-                {/*<YAxis
-                  orientation="right"
-                  getY={d => d.cash_out_amount}
-                  yDomain={data.map(d => d.cash_out_amount)}
-                  tickFormat={(v) => numeral(v).format("0.0a")}
-                />*/}
-              </FlexibleXYPlot>
+                series={timeSeries}
+                xType="time"
+                style={{ flex: 1 }}
+              />
               <DiscreteColorLegend
                 orientation="horizontal"
                 className="row centered"
                 height={68}
-                items={["Cash in", "Cash out"]}
+                items={timeSeries.map(s => s.title)}
+                onItemClick={(a, n) => this.setState({
+                  timeSeries: timeSeries.map((s, i) =>
+                    ({ ...s, disabled: i === n && !s.disabled })
+                  )
+                })}
               />
             </div>
             <div className="container row">
-              <div className="container centered widget" style={{ minWidth: "400px", minHeight: "400px" }}>
+              <div
+                className="container centered widget"
+                style={{ minWidth: "400px", minHeight: "400px" }}
+              >
                 <h4>Distribution by institutions</h4>
                 <DetailSunburst
                   data={{
@@ -147,10 +149,6 @@ export default class Dashboard extends React.Component {
               <div className="container centered widget" style={{ minWidth: "400px", minHeight: "400px" }}>
                 <h4>Distribution by institutions</h4>
                 <InplaceSunBurst
-                  viewBox="0 0 100 100"
-                  className="graph"
-                  width={100}
-                  height={100}
                   data={{
                     name: "root",
                     children: distributionByInstitution,
@@ -158,6 +156,7 @@ export default class Dashboard extends React.Component {
                   }}
                   getSize={({ total }) => total}
                   getColor={({ color }) => color}
+                  className="graph"
                 />
                 <DiscreteColorLegend
                   orientation="horizontal"
